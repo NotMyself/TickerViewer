@@ -126,6 +126,9 @@
   <ItemGroup>
     <Content Include="Content\Web.config" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\mstf.csv" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>
