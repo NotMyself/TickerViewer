@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Stock Performance Viewer</title>
+</head>
+<body>
+<h1>Enter A Ticker</h1>
+<input type="text" id="symbol"/>
+<div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
+<script src="/Content/Scripts/jquery-1.4.4.min.js" type="text/javascript"> </script>
+<script src="/Content/Scripts/highcharts.js" type="text/javascript"> </script>
+<script type="text/javascript">
+    var chart;
+    var options;
+    $(document).ready(function () {
+        options = {
+            chart: {
+                renderTo: 'container',
+                defaultSeriesType: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: 'Daily Performance Over Time',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: finance.yahoo.com',
+                x: -20
+            },
+            xAxis: {
+                type: 'datetime',
+                tickInterval: 24 * 3600 * 1000, // daily
+                tickWidth: 0,
+                gridLineWidth: 1,
+                labels: {
+                    align: 'left',
+                    x: 3,
+                    y: -3
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Price'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    //TODO: fix this to be pretty date.
+                    var pretty = '<b>' + this.series.name + '</b><br/>' +
+                            this.point.name + ': ' + this.y;
+                    return pretty;
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [
+                { name: "Open", lineWidth: 4 },
+                { name: "Close", lineWidth: 4 },
+                { name: "High", lineWidth: 4 },
+                { name: "Low", lineWidth: 4 }
+            ]
+        };
+
+        $('#symbol').keyup(function (e) {
+            if (e.keyCode == '13') {
+                $.getJSON("/ticker/" + this.value, null, function (dailyPrices) {
+                    var openingPrices = [],
+                        closingPrices = [],
+                        highPrices = [],
+                        lowPrices = [];
+                    $.each(dailyPrices, function (i, dailyPrice) {
+                        openingPrices.push([dailyPrice.Date, dailyPrice.Open]);
+                        closingPrices.push([dailyPrice.Date, dailyPrice.Close]);
+                        highPrices.push([dailyPrice.Date, dailyPrice.High]);
+                        lowPrices.push([dailyPrice.Date, dailyPrice.Low]);
+                    });
+                    options.series[0].data = openingPrices;
+                    options.series[1].data = closingPrices;
+                    options.series[2].data = highPrices;
+                    options.series[3].data = lowPrices;
+                    chart = new Highcharts.Chart(options);
+                });
+            }
+        });
+
+        var chart = new Highcharts.Chart(options);
+    });
+				
+    </script>
+</body>
+</html>

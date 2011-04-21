@@ -1,0 +1,10 @@
+*.suo
+*.cache
+*csproj.user
+src/*/bin
+src/*/obj
+*ReSharper*
+build
+*.pidb
+*.userprefs
+test-results
