@@ -7,8 +7,8 @@ namespace TickerPerformanceViewer.Web.Models
     [IgnoreFirst]
     public class DailyPrice
     {
-        [FieldConverter(ConverterKind.Date, "yyyy-MM-dd")] 
-        public DateTime Date;
+        //[FieldConverter(ConverterKind.Date, "yyyy-MM-dd")] 
+        public string Date;
         public float Open;
         public float High;
         public float Low;
